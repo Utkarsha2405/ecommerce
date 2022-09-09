@@ -1,3 +1,16 @@
+<?php
+use Phppot\Category;
+
+require_once __DIR__ . '/Model/Category.php';
+$categoryModel = new Category();
+$keyword = "";
+if (! empty($_GET["category"])) {
+    $keyword = $_GET["category"];
+    $categoryResult = $categoryModel->getCategoryByName($keyword);
+} else {
+    $categoryResult = $categoryModel->getAllCategory();
+}
+?>
 <html>
 <head>
 <title>Category-subcategory-gallery-with-search</title>
@@ -14,23 +27,22 @@
 			<div class='form-row mt-5 mt-4'>
 				<div class='col-md-6 form-inline'>
 					<label class="px-3">Name </label><input type='text'
-						class='form-control' name='category' id='category'
-						value="<?php echo $keyword; ?>"> <input
-						class="btn btn-secondary ml-2" type="submit" value="Search"
+						class='form-control' name='category' id='category' value=<?php echo $keyword; ?>>
+					<input class="btn btn-secondary ml-2" type="submit" value="Search"
 						name="search">
 				</div>
 			</div>
 			<div>
-<?php
+			<?php
 if (! empty($categoryResult)) {
     $categoryArray = array_chunk($categoryResult, 4);
     $i = 1;
     foreach ($categoryArray as $column) {
         ?><div class="form-row mb-3" id="category-row-<?php echo $i;?>">
-<?php
+        <?php
         foreach ($column as $k => $v) {
             ?>
-<div class="col-md-3 mt-3 rounded"
+					<div class="col-md-3 mt-3 rounded"
 						id="cat-id-<?php echo $column[$k]["id"];?>"
 						onclick="showSubcategory('<?php echo $column[$k]["id"];?>','<?php echo $i;?>','<?php echo $column[$k]["category_name"];?>')">
 						<div class="text-center">
@@ -38,14 +50,14 @@ if (! empty($categoryResult)) {
 							<div class="text-center font-weight-bold mt-3 mb-3"><?php echo $column[$k]["category_name"];?></div>
 						</div>
 					</div>
-<?php
+					<?php
         }
         ?>
-<div class="form-row bg-light mt-3 w-100 subcategory-row d-none"></div>
+						<div class="form-row bg-light mt-3 w-100 subcategory-row d-none"></div>
 				</div>
-<?php
+        <?php
         $i ++;
-}
+    }
 }
 ?>
 </div>
